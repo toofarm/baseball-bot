@@ -1,4 +1,1 @@
-from pybaseball import team_pitching
-data = team_pitching(2018)
-
-print(data.iloc[15])
+from data_preprocessing import preprocess_data
