@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 
 # App functions
@@ -21,6 +22,8 @@ async def query(query: Query):
     db = preprocess_data()
 
     # Query the model
-    response = query_model(db, query.message)
+    response = query_model(db, query.message, query.timestamp)
 
-    return response
+    jsoned = jsonable_encoder(response)
+
+    return jsoned
