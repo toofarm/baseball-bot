@@ -77,7 +77,4 @@ def preprocess_data():
         db.add(documents=md_files, ids=[str(i) for i in range(len(md_files))])
 
     return db
-
-if __name__ == "__main__":
-    preprocess_data()
         
