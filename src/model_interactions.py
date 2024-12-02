@@ -1,9 +1,9 @@
 import os
-import json
 import google.generativeai as genai
 from dotenv import load_dotenv
 from datetime import datetime, timezone
 from src.data_preprocessing import GeminiEmbeddingFunction as embed_fn
+from src.model_evaluation import calculate_cost
 
 load_dotenv()
 
@@ -48,6 +48,10 @@ def query_model(db, query: str, timestamp: int):
     output_timestamp = int(datetime.now(timezone.utc).timestamp())
     input_timestamp = timestamp
 
+    # Cost 
+    token_count = answer.usage_metadata.total_token_count
+    cost = calculate_cost(token_count) 
+
     return {
         "response": answer.text,
         "performance_metrics": {
@@ -56,7 +60,8 @@ def query_model(db, query: str, timestamp: int):
             "total_token_count": answer.usage_metadata.total_token_count,
             "input_timestamp": input_timestamp,
             "output_timestamp": output_timestamp,
-            "timestamp_delta": output_timestamp - input_timestamp
+            "timestamp_delta": output_timestamp - input_timestamp,
+            "estimated_cost_usd": cost
         }
     }
 
